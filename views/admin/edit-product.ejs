@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+<h2>✏️ Edit Produk</h2>
+<form action="/admin/product/update/<%= product.id %>" method="POST" enctype="multipart/form-data" class="p-3 bg-dark rounded">
+    <input type="text" name="name" value="<%= product.name %>" class="form-control mb-2" required>
+    <input type="number" name="price" value="<%= product.price %>" class="form-control mb-2" required>
+    <input type="number" name="stock" value="<%= product.stock %>" class="form-control mb-2" required>
+    <input type="file" name="image" class="form-control mb-2">
+    <p>Gambar saat ini: <img src="/uploads/<%= product.image %>" width="100"></p>
+    <button class="btn btn-warning">Update</button>
+    <a href="/admin/products" class="btn btn-secondary">Batal</a>
+</form>
+<%- include('../partials/footer') %>

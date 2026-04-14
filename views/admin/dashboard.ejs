@@ -1,0 +1,90 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>👑 ZENZO STORE - DASHBOARD</h2>
+    <a href="/admin/logout" class="btn btn-danger">LOGOUT</a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h5>📦 KELOLA PRODUK</h5>
+                <p>Tambah, edit, atau hapus produk Zenzo Store</p>
+                <a href="/admin/products" class="btn btn-danger">Kelola Produk →</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-info text-dark">
+            <div class="card-body">
+                <h5>💰 TOTAL TRANSAKSI</h5>
+                <p class="fs-3"><%= transactions.length %> pesanan</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>📋 DAFTAR TRANSAKSI</h3>
+<div class="table-responsive">
+    <table class="table table-dark table-bordered">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Kontak & Alamat</th>
+                <th>Produk</th>
+                <th>Total</th>
+                <th>Metode</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% transactions.forEach(t => { %>
+            <tr>
+                <td><strong><%= t.customer_name %></strong></td>
+                <td>
+                    <%= t.customer_phone %><br>
+                    <small><%= t.customer_address %></small>
+                </td>
+                <td>
+                    <% 
+                        const product = products.find(p => p.id === t.product_id);
+                        if(product) { 
+                    %>
+                        <%= product.name %> (x<%= t.quantity %>)
+                    <% } else { %>
+                        Produk tidak ditemukan
+                    <% } %>
+                </td>
+                <td>Rp <%= t.total_price.toLocaleString() %></td>
+                <td><%= t.payment_method %></td>
+                <td>
+                    <span class="badge bg-<%= t.status === 'paid' ? 'success' : (t.status === 'cancelled' ? 'danger' : 'warning') %>">
+                        <%= t.status %>
+                    </span>
+                </td>
+                <td>
+                    <form action="/admin/transaction/update" method="POST">
+                        <input type="hidden" name="id" value="<%= t.id %>">
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="pending" <%= t.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                            <option value="paid" <%= t.status === 'paid' ? 'selected' : '' %>>Paid</option>
+                            <option value="cancelled" <%= t.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                        </select>
+                        <button class="btn btn-primary btn-sm mt-1">Update</button>
+                    </form>
+                 </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<% if (transactions.length === 0) { %>
+    <div class="alert alert-info">Belum ada transaksi.</div>
+<% } %>
+
+<a href="/admin/products" class="btn btn-secondary mt-3">← Kembali ke Kelola Produk</a>
+
+<%- include('../partials/footer') %>

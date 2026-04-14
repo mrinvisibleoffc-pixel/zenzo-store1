@@ -1,0 +1,66 @@
+<%- include('partials/header') %>
+
+<style>
+    .led-payment {
+        border: 2px solid #ff0000;
+        box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+        animation: led-pulse-red 1.5s infinite;
+        background: white;
+        padding: 10px;
+        border-radius: 10px;
+        display: inline-block;
+        color: #000000;
+        font-weight: bold;
+    }
+    
+    @keyframes led-pulse-red {
+        0% { box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; border-color: #ff0000; }
+        50% { box-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 45px #ff0000; border-color: #ff4444; }
+        100% { box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; border-color: #ff0000; }
+    }
+    
+    .qris-img {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: white;
+        padding: 10px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card bg-dark text-white">
+            <div class="card-header bg-danger">
+                <h4 class="mb-0">✅ Pesanan Zenzo Store Diterima!</h4>
+            </div>
+            <div class="card-body text-center">
+                <h3>❤️ Terima Kasih!</h3>
+                <p>Total: <strong>Rp <%= total_price.toLocaleString() %></strong></p>
+                <p>Metode: <%= payment_method %></p>
+                
+                <div class="alert alert-warning">
+                    <h5>💳 Bayar ke:</h5>
+                    
+                    <% if (payment_method === 'QRIS') { %>
+                        <div class="text-center">
+                            <img src="https://gangalink.vercel.app/i/m0vjjrvk.jpg" class="qris-img">
+                            <p class="mt-2">Scan QRIS di atas</p>
+                            <p class="led-payment">Atau transfer ke: 0895323247676</p>
+                        </div>
+                    <% } else if (payment_method === 'DANA') { %>
+                        <p class="led-payment">DANA: 0895323247676</p>
+                    <% } else if (payment_method === 'GOPAY') { %>
+                        <p class="led-payment">GOPAY: 0895323247676</p>
+                    <% } %>
+                </div>
+                
+                <p>Setelah bayar, admin akan konfirmasi dalam 1x24 jam.</p>
+                <a href="/" class="btn btn-warning">← Kembali ke Zenzo Store</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

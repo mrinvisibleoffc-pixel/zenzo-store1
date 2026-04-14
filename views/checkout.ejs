@@ -1,0 +1,68 @@
+<%- include('partials/header') %>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card bg-dark">
+            <div class="card-header bg-danger">
+                <h4 class="mb-0">👑 Zenzo Store - Checkout</h4>
+            </div>
+            <div class="card-body">
+                <h5><%= product.name %></h5>
+                <p>Harga: <strong>Rp <%= product.price.toLocaleString() %></strong></p>
+                <p>Stok tersedia: <%= product.stock %> pcs</p>
+                
+                <form action="/process-checkout" method="POST">
+                    <input type="hidden" name="product_id" value="<%= product.id %>">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nama Lengkap</label>
+                        <input type="text" name="customer_name" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nomor WhatsApp/HP</label>
+                        <input type="text" name="customer_phone" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Alamat Lengkap</label>
+                        <textarea name="customer_address" class="form-control" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Jumlah</label>
+                        <input type="number" name="quantity" class="form-control" min="1" max="<%= product.stock %>" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Metode Pembayaran</label>
+                        <select name="payment_method" class="form-control" required>
+                            <option value="QRIS">📱 QRIS (Scan QRIS)</option>
+                            <option value="DANA">💜 DANA - 0895323247676</option>
+                            <option value="GOPAY">💚 GOPAY - 0895323247676</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" name="total_price" id="total_price">
+                    
+                    <button type="submit" class="btn btn-danger w-100 py-2">✅ KONFIRMASI PESANAN</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const qty = document.querySelector('input[name="quantity"]');
+    const price = <%= product.price %>;
+    
+    qty.addEventListener('input', function() {
+        const total = qty.value * price;
+        document.getElementById('total_price').value = total;
+    });
+    
+    // Trigger sekali biar total_price keisi
+    qty.dispatchEvent(new Event('input'));
+</script>
+
+<%- include('partials/footer') %>
