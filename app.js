@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-const db = mysql.createConnection({
+const db = mysql.createConnection(process.env.DATABASE_URL || {
     host: 'localhost',
     user: 'root',
     password: '',
